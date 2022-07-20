@@ -25,6 +25,12 @@ pub mod solana_counter_example {
         counter_account.count = u64::MAX;
         return Ok(())
     }
+
+    pub fn reset(ctx: Context<Reset>, count: u64) -> Result<()> {
+        let counter_account = &mut ctx.accounts.counter_account;
+        counter_account.count = count;
+        return Ok(())
+    }
 }
 
 // Transaction instructions
@@ -42,6 +48,13 @@ pub struct Initialize<'info> {
 // Transaction instructions
 #[derive(Accounts)]
 pub struct Increment<'info> {
+    #[account(mut)]
+    pub counter_account: Account<'info, Counter>
+}
+
+// Transaction instruction
+#[derive(Accounts)]
+pub struct Reset<'info> {
     #[account(mut)]
     pub counter_account: Account<'info, Counter>
 }
